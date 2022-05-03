@@ -8,8 +8,9 @@ use tui::{
     widgets::{Block, Borders},
     Frame,
 };
+use crate::app::App;
 
-pub fn ui1<B: Backend>(f: &mut Frame<B>, url: &str, border: i32, folder: &str) {
+pub fn ui1<B: Backend>(f: &mut Frame<B>, app:App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
@@ -25,8 +26,8 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, url: &str, border: i32, folder: &str) {
         )
         .split(f.size());
     let text = Spans::from(vec![
-        Span::styled("URL: ", Style::default().fg(Color::Blue)),
-        Span::raw(url),
+        Span::styled("URL: ", Style::default().fg(Color::Green)),
+        Span::raw(app.url),
     ]);
     let block = Paragraph::new(text).block(
         Block::default()
@@ -34,12 +35,12 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, url: &str, border: i32, folder: &str) {
                 "URL",
                 Style::default().add_modifier(Modifier::BOLD),
             ))
-            .borders(check_border(border, 0)),
+            .borders(Borders::ALL).border_style(check_border(app.border, 0)),
     );
     f.render_widget(block, chunks[0]);
     let text2 = Spans::from(vec![
-        Span::styled("Folder: ", Style::default().fg(Color::Blue)),
-        Span::raw(folder),
+        Span::styled("Folder: ", Style::default().fg(Color::Green)),
+        Span::raw(app.folder),
     ]);
     let block = Paragraph::new(text2).block(
         Block::default()
@@ -47,14 +48,16 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, url: &str, border: i32, folder: &str) {
                 "Folder",
                 Style::default().add_modifier(Modifier::BOLD),
             ))
-            .borders(check_border(border, 1)),
+            .borders(Borders::ALL).border_style(check_border(app.border, 1)),
     );
     f.render_widget(block, chunks[1]);
 }
 
-fn check_border(app: i32, block: i32) -> Borders {
+fn check_border(app: i32, block: i32) -> Style {
     if block == app {
-        return Borders::ALL;
+        return Style::default()
+            .fg(Color::Blue);
     }
-    return Borders::NONE;
+    return Style::default()
+        .fg(Color::White)
 }
