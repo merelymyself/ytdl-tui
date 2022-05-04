@@ -10,6 +10,7 @@ use tui::{terminal, Terminal};
 use ui::ui1;
 use crate::app::App;
 use run_app::run_app;
+use std::time::Duration;
 
 fn main() {
     let stdout = io::stdout();
@@ -17,6 +18,6 @@ fn main() {
     let mut terminal = Terminal::new(backend).unwrap();
     enable_raw_mode().unwrap();
     Command::new("clear").spawn().unwrap();
-    let app = App::new();
-    terminal.draw(|f| ui1(f, app)).unwrap();
+    let mut app = App::new();
+    run_app(&mut terminal, &mut app, Duration::from_millis(100));
 }

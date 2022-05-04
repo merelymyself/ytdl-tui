@@ -10,7 +10,7 @@ use tui::{
 };
 use crate::app::App;
 
-pub fn ui1<B: Backend>(f: &mut Frame<B>, app:App) {
+pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
@@ -26,7 +26,7 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:App) {
     
     let text = Spans::from(vec![
         Span::styled("URL: ", Style::default().fg(Color::Green)),
-        Span::raw(app.url),
+        Span::raw(&app.url),
     ]);
     
     let block = Paragraph::new(text).block(
@@ -42,7 +42,7 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:App) {
     
     let text2 = Spans::from(vec![
         Span::styled("Folder: ", Style::default().fg(Color::Green)),
-        Span::raw(app.folder),
+        Span::raw(&app.folder),
     ]);
 
     let block = Paragraph::new(text2).block(
