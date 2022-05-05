@@ -14,11 +14,12 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
+use std::process::Command;
 
 pub fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App, tick_rate: Duration) -> io::Result<()> {
     let mut last_tick = Instant::now();
         loop {
-            terminal.draw(|f| ui1(f, app));
+            terminal.draw(|f| ui1(f, app)).unwrap();
 
             let timeout = tick_rate
                 .checked_sub(last_tick.elapsed())
@@ -33,7 +34,10 @@ pub fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App, tick_rate:
                         KeyCode::Right => app.on_right(),
                         KeyCode::Down => app.on_down(),
                         KeyCode::Enter => app.on_enter(),
-                        KeyCode::Esc => return Ok(()),
+                        KeyCode::Esc => {                        
+                            Command::new("clear").spawn().unwrap();
+                            return Ok(())
+                        },
                         _ => {}
                     }
                 }
