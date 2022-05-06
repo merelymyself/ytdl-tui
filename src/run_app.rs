@@ -1,5 +1,4 @@
 use std::{
-    error::Error,
     io,
     time::{Duration, Instant},
 };

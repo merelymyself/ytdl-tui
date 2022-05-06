@@ -5,6 +5,7 @@ pub struct App {
     pub url: String,
     pub folder: String,
     pub border: i32,
+    pub format_status0: i32,
     pub format_status: i32,
     pub format_status2: i32,
     pub format: i32,
@@ -16,6 +17,7 @@ impl App {
             url: String::from("youtube.com/"),
             folder: String::from(home_dir().unwrap_or(PathBuf::from("")).to_string_lossy().to_string()),
             border: 0,
+            format_status0: 1,
             format_status: 1,
             format_status2: 1,
             format: 0,
@@ -41,7 +43,11 @@ impl App {
         if self.border == 1 || self.border == 0 {
             self.border += 1;
         }
-        else if self.border == 2 && self.format_status < 9 {
+        else if self.border == 2 && self.format_status0 == 1 {
+            self.format_status0 += 1;
+            self.format_status = 1;
+        }
+        else if self.border == 3 && self.format_status < 8 && self.format_status0 != 2 {
             self.format_status += 1;
         }
     }
@@ -49,11 +55,11 @@ impl App {
         if self.border == 1 {
             self.border = 0;
         }
-        else if self.border == 2 && self.format_status != 0 {
-            self.format_status -= 1;
+        else if self.border == 2 && self.format_status0 == 2 {
+            self.format_status0 -= 1;
         }
-        else if self.border == 3 && self.format_status2 != 0 {
-            self.format_status2 -= 1;
+        else if self.border == 3 && self.format_status != 1 && self.format_status0 != 2 {
+            self.format_status -= 1;
         }
     }
     pub fn on_left(&mut self) {
@@ -62,12 +68,12 @@ impl App {
         }
     }
     pub fn on_right(&mut self) {
-        if self.border < 3 {
+        if self.border < 4 {
             self.border+=1;
         }
     }
     pub fn on_enter(&mut self) {
-        if self.border < 3 {
+        if self.border < 4 {
             self.border += 1;
         }
     }

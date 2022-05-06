@@ -48,8 +48,9 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
         .margin(1)
         .constraints(
             [
-                Constraint::Percentage(15),
-                Constraint::Percentage(15),
+                Constraint::Percentage(10),
+                Constraint::Percentage(10),
+                Constraint::Percentage(10),
                 Constraint::Percentage(35),
                 Constraint::Percentage(35)
             ]
@@ -89,41 +90,17 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
     
     f.render_widget(block, chunks[1]);
 
-    let items1 = vec![String::from("none"), String::from("best"), String::from("aac"), String::from("flac"), String::from("mp3"), String::from("m4a"), String::from("opus"), String::from("vorbis"), String::from("wav")]; 
+    let items = vec![String::from("Audio Only"), String::from("Audio+Video")];
+    let items1 = vec![String::from("best"), String::from("aac"), String::from("flac"), String::from("mp3"), String::from("m4a"), String::from("opus"), String::from("vorbis"), String::from("wav")]; 
 
-    let items2 = vec![String::from("none")];
+    let items2 = vec![String::from("best"), String::from("")];
 
-    let mut chosen_list = Vec::new();
-    for n in items1.clone() {
-        chosen_list.push(ListItem::new(n));
-    }
-    let block = List::new(chosen_list)
-        .block(
-                Block::default()
-                    .title(Span::styled(
-                    "Audio Format",
-                    Style::default().add_modifier(Modifier::BOLD),
-                ))
-                .borders(Borders::ALL).border_style(check_border(app.border, 2)),
-                )
-        .highlight_style(
-            Style::default()
-                .bg(Color::LightGreen)
-                .add_modifier(Modifier::BOLD),
-        )
-        .highlight_symbol(">> ");
-    
-    let mut highlight = Events::new(items1);
-    highlight.nth(app.format_status as usize);
-
-    f.render_stateful_widget(block, chunks[2], &mut highlight.state);
-
-    let mut chosen_list2 = Vec::new();
-    for n in items2.clone() {
-        chosen_list2.push(ListItem::new(n));
+    let mut overall = Vec::new();
+    for n in items.clone() {
+        overall.push(ListItem::new(n));
     }
 
-    let block = List::new(chosen_list2)
+    let block = List::new(overall)
         .block(
                 Block::default()
                     .title(Span::styled(
@@ -139,10 +116,61 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
         )
         .highlight_symbol(">> ");
     
+    let mut overall_highlight = Events::new(items);
+    overall_highlight.nth(app.format_status0 as usize);
+
+    f.render_stateful_widget(block, chunks[2], &mut overall_highlight.state);
+
+    let mut chosen_list = Vec::new();
+    for n in items1.clone() {
+        chosen_list.push(ListItem::new(n));
+    }
+    let block = List::new(chosen_list)
+        .block(
+                Block::default()
+                    .title(Span::styled(
+                    "Audio Format",
+                    Style::default().add_modifier(Modifier::BOLD),
+                ))
+                .borders(Borders::ALL).border_style(check_border(app.border, 3)),
+                )
+        .highlight_style(
+            Style::default()
+                .bg(Color::LightGreen)
+                .add_modifier(Modifier::BOLD),
+        )
+        .highlight_symbol(">> ");
+    
+    let mut highlight = Events::new(items1);
+    highlight.nth(app.format_status as usize);
+
+    f.render_stateful_widget(block, chunks[3], &mut highlight.state);
+
+    let mut chosen_list2 = Vec::new();
+    for n in items2.clone() {
+        chosen_list2.push(ListItem::new(n));
+    }
+
+    let block = List::new(chosen_list2)
+        .block(
+                Block::default()
+                    .title(Span::styled(
+                    "Video Format",
+                    Style::default().add_modifier(Modifier::BOLD),
+                ))
+                .borders(Borders::ALL).border_style(check_border(app.border, 4)),
+                )
+        .highlight_style(
+            Style::default()
+                .bg(Color::LightGreen)
+                .add_modifier(Modifier::BOLD),
+        )
+        .highlight_symbol(">> ");
+    
     let mut highlight2 = Events::new(items2);
     highlight2.nth(app.format_status2 as usize);
 
-    f.render_stateful_widget(block, chunks[3], &mut highlight2.state);
+    f.render_stateful_widget(block, chunks[4], &mut highlight2.state);
 }
 
 fn check_border(app: i32, block: i32) -> Style {
