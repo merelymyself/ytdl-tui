@@ -42,11 +42,11 @@ impl App {
         }
     }
     pub fn on_up(&mut self) {
-        if self.border == 1 {
-            self.border = 0;
-        }
-        else if self.border == 2 && self.format_status != 1 {
+        if self.border == 2 && self.format_status != 1 {
             self.format_status -= 1;
+        }
+        else if self.border != 0 {
+            self.border -= 1;
         }
     }
     pub fn on_left(&mut self) {
@@ -63,5 +63,12 @@ impl App {
         if self.border < 2 {
             self.border += 1;
         }
+        if self.border == 2 {
+            launch_command(self);  
+        }
     }
+}
+
+fn launch_command(app: &mut App) {
+    
 }

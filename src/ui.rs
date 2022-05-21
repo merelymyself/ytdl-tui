@@ -45,12 +45,12 @@ impl Events {
 pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .margin(1)
+        .margin(0)
         .constraints(
             [
-                Constraint::Percentage(10),
-                Constraint::Percentage(10),
-                Constraint::Percentage(50)
+                Constraint::Percentage(20),
+                Constraint::Percentage(20),
+                Constraint::Percentage(60)
             ]
             .as_ref(),
         )
