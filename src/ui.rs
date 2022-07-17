@@ -11,27 +11,14 @@ use tui::{
 use crate::app::App;
 
 struct Events {
-    // `items` is the state managed by your application.
-    items: Vec<String>,
-    // `state` is the state that can be modified by the UI. It stores the index of the selected
-    // item as well as the offset computed during the previous draw call (used to implement
-    // natural scrolling).
     state: ListState
 }
 
 impl Events {
-    fn new(items: Vec<String>) -> Events {
+    fn new() -> Events {
         Events {
-            items,
             state: ListState::default(),
         }
-    }
-
-    pub fn _set_items(&mut self, items: Vec<String>) {
-        self.items = items;
-        // We reset the state as the associated items have changed. This effectively reset
-        // the selection as well as the stored offset.
-        self.state = ListState::default();
     }
 
     // Select the next item. This will not be reflected until the widget is drawn in the
@@ -111,7 +98,7 @@ pub fn ui1<B: Backend>(f: &mut Frame<B>, app:&App) {
         )
         .highlight_symbol(">> ");
     
-    let mut overall_highlight = Events::new(extensions);
+    let mut overall_highlight = Events::new();
     overall_highlight.nth(app.format_status as usize);
 
     f.render_stateful_widget(block, chunks[2], &mut overall_highlight.state);

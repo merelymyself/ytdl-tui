@@ -1,4 +1,4 @@
-use std::{path::PathBuf, str::Chars, iter};
+use std::{path::PathBuf, str::Chars, iter, process::Command};
 use dirs::home_dir;
 
 pub struct App {
@@ -70,5 +70,8 @@ impl App {
 }
 
 fn launch_command(app: &mut App) {
-    
+    Command::new("youtube-dl")
+        .arg("-o")
+        .arg(format!("\"{}%(title)s.%(ext)s\"", app.folder.clone()))
+        .spawn();
 }
